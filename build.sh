@@ -1,3 +1,2 @@
 #!/bin/bash
-
-export MYSQL_CONN="server=0.0.0.0;uid=garrard;pwd=password;database=WebApiDB"
+docker build . --tag mywebapi:1.0

@@ -1,0 +1,1 @@
+docker build . -t garrardkitchen/mysql:5.7.26

@@ -1,0 +1,23 @@
+version: "3"
+services:
+  web:
+    # image: mywebapi:1.0
+    build: 
+      dockerfile: Dockerfile
+      context: .
+    depends_on: 
+      - db
+    ports:
+      - "5000:5000"
+    environment: 
+      - MYSQL_CONN=server=db;uid=garrard;pwd=password;database=WebApiDB
+    links:
+      - db
+  db:
+    # image: garrardkitchen/mysql:5.7.26
+    build: 
+      dockerfile:  Dockerfile
+      context: ./src/mysql/
+    environment: 
+      - MYSQL_DATABASE=WebApiDB 
+      - MYSQL_ROOT_PASSWORD=password

@@ -20,7 +20,12 @@ namespace Users.Web.Controllers
             IRepository<UserDto> repository = new Repository(Config.ConnectionString);
             Users.Api.User userApi = new User(repository);
             UserDto user = userApi.GetUser(email);
-            return Ok(new{firstname=user.Firstname, surname=user.Surname, email=user.Email});
+            if (user == null)
+            {
+                return BadRequest(new {message = "This email does not exist"}); 
+            } else {
+                return Ok(new{firstname=user.Firstname, surname=user.Surname, email=user.Email});
+            }
         }
 
         // PUT api/user/update
@@ -44,11 +49,11 @@ namespace Users.Web.Controllers
                 UserDto user = userApi.AddUser(userDto);
                 return Ok(new {firstname = user.Firstname, surname = user.Surname, email = user.Email});
             }
-            catch (DuplicateUserException ex)
+            catch (DuplicateUserException)
             {
                 return BadRequest(new {message = "This email already exists"});
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 return BadRequest();
             }

@@ -6,7 +6,54 @@ Master branch will be created and then a feature branch called dev/api-1.
 
 ## Solution notes for developer
 
-- TBC
+Enter this command to run the entire solution from the command line:
+
+```
+docker-compose up
+```
+
+Enter this command to stop/tear down the entire solution from the command line:
+
+```
+docker-compose down
+```
+
+Enter this command to build all the containers:
+```
+docker-compose build
+```
+
+There are 2 images that are build; `myapi` and `garrardkitchen/mysql:5.7.26`. The mysql image loads a default schema which can be found in the `mysql/seed.sql` file.
+
+To add user details:
+
+```json
+GET http://localhost:5000/api/user/add
+{
+  "firstname": "Garrard",
+  "surname": "Kitchen",
+  "email": "garrardkitchen@gmail.com",
+  "password" : "ABCD"
+}
+```
+
+To update user details:
+
+```json
+GET http://localhost:5000/api/user/add
+{
+  "firstname": "Garrard",
+  "surname": "Kitchen",
+  "email": "garrardpkitchen@yahoo.co.uk",
+  "password" : "EFGH"
+}
+```
+
+To obtain a user details:
+
+```http
+GET http://localhost:5000/api/user/garrardpkitchen@yahoo.co.uk
+```
 
 ## Domain Specific Language
 
@@ -42,10 +89,10 @@ Master branch will be created and then a feature branch called dev/api-1.
 
 #### (api-3)
 
-- Create script to build and package in container
-- Create docker compose file to spin up container with api + Db
-- Document how API can be run locally using docker and include sample web requests (integration tests or manual)
-- Ensure easy to follow instructions so container is spun up/down and endpoints are hit
+- Create script to build and package in container - done
+- Create docker compose file to spin up container with api + Db - done
+- Document how API can be run locally using docker and include sample web requests (integration tests or manual) - done
+- Ensure easy to follow instructions so container is spun up/down and endpoints are hit - done
 
 #### (api-4)
 
@@ -74,7 +121,7 @@ dotnet sln users.sln add **/*.csproj
 
 - Db Choice for test
 
-Going to use MySQL. In reality, based on spec and the type of data (what I consider to be a list and non relational), I would opt for NoSQL engine and initially partition on first letter of Surname.  I would always opt for a managed cloud service. Other considerations will be HA and configurating solution over multiple cloud providers if you need to go to that extreme.  I would definitely configure over multiple availability zones for minimum HA, but would push for cross region HA and well practices DR procedures & drills.
+Going to use MySQL. In reality, based on spec and the type of data (what I consider to be a list and non relational), I would opt for NoSQL engine and initially partition on first letter of Surname.  I would always opt for a managed cloud service. Other considerations will be HA and configuring solution over multiple cloud providers if you need to go to that extreme.  I would definitely configure over multiple availability zones for minimum HA, but would push for cross region HA and well practices DR procedures & drills.
 
 - Create MySQL using docker
 
