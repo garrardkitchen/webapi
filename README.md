@@ -179,8 +179,8 @@ docker run --name my-sql --rm -e MYSQL_ROOT_PASSWORD=password -p 3306:3306 -d my
 - CI/CD 
 - Include observability (logs, metrics and tracing)
 - Hook up to remote API solution to test availability and response times
-- Use different permissions (thinking of AWS IAM) as used for dev/staging
-- Use different env var values in dockerfile
+- Use different permissions (thinking of AWS IAM) to those used for dev/staging environments
+- Use different environment variable values in dockerfile
 - Load balance RESTful API over multiple instances
 - Scale based on demand
 - Canary releases
@@ -191,13 +191,13 @@ docker run --name my-sql --rm -e MYSQL_ROOT_PASSWORD=password -p 3306:3306 -d my
 - Autoscale
 - Change code to be async from being a sync
 - Possibly break RESTful API up into approapriate silos (microservices) based on demand and or responsibility (CQRS)
-- Ensure high IOPs for DB access and ensure instances are close (thinking of AWS placement groups)
-- Use redis and use write through pattern to write changes onto DB 
+- Ensure host instances are configured for high IOPs for DB access and ensure instances are close (thinking of AWS placement groups)
+- Use Redis and use write through pattern to write changes onto DB 
 
 ### Consider continuous operation in the event of problems around reading and writing from the DB
 
-- Configure DB for HA, read replicas
-- Cycle DB passwords on regular basis
+- Configure DB for HA, use read replicas
+- Recycle DB password on regular basis
 - Failover to different region, minimum, configure for different Availbility Zone
 - Rearchitect for loosely coupling using messaging service (thinking of SQS or RabbitMQ)
 - Mechanism to update customers of system degredation (thinking of statuspage.io)
@@ -206,7 +206,7 @@ docker run --name my-sql --rm -e MYSQL_ROOT_PASSWORD=password -p 3306:3306 -d my
 
 ### Consider how to ensure security of the user information
 
-- Permissions to run and permissions to operation
+- Appropriate Permissions to invoke and permissions to operate (Least Privilege - POLP)
 - Use hashed password
 - Mask PII fields
 - Regularly recycle DB password
