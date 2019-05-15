@@ -46,20 +46,23 @@ cd src/mysql
 ./run.sh
 ```
 
-Open Users solution (`/Users.sln`) in Visual Studio 2019 or Rider. Select Users.Web as start up project and run/debug.
+Open Users solution (`/Users.sln`) in Visual Studio 2019 or Rider. Select Users.Web as start up project then either run or debug project.
 
-Test the RESTful API by using the 3 endpoints as shown in the `POSTMAN` section below.
+To test the RESTful API, please use the 3 endpoints as shown in the `POSTMAN` section below.
 
-There are 2 test projects located in the `/tests` folder.  These test the API and the other the RESTful API endpoints (TODO).
+There are 2 test projects located in the `/tests` folder.  These test the API (done) and the other the HTTP API endpoints (TODO).
 
 If you want to run from the command line, outside of an IDE, please run the following:
 
 ```
+cd <into repo root folder>
 ./build.sh
 ./run.sh
 ```
 
 ## POSTMAN
+
+This sections includes the HTTP API endpoints to call to test the 3 use cases (insert, update and read).
 
 To add user details:
 
@@ -90,7 +93,6 @@ To obtain user details for email **garrardkitchen@gmail.com**:
 ```http
 GET http://localhost:5000/api/user/garrardkitchen@gmail.com
 ```
-
 
 ## Domain Specific Language
 
@@ -135,6 +137,7 @@ _Include considerations in README (this) file._
 - Consider continuous operation in the event of problems around reading and writing from the DB
 - Consider how to ensure security of the user information
 
+_Please see `Considerations` section below_
 
 
 ### Notes
@@ -161,6 +164,54 @@ Going to use MySQL. In reality, based on spec and the type of data (what I consi
 docker run --name my-sql --rm -e MYSQL_ROOT_PASSWORD=password -p 3306:3306 -d mysql:5.7.26
 ```
 
+## Considerations
+
+### Consider how API can be run in a production environment
+
+- CI/CD 
+- Include observability (logs, metrics and tracing)
+- Hook up to remote API solution to test availability and response times
+- Use different permissions (thinking of AWS IAM) as used for dev/staging
+- Use different env var values in dockerfile
+- Load balance RESTful API over multiple instances
+- Scale based on demand
+- Canary releases
+
+### Consider how a large volume of requests, including concurrent creation and update operations
+
+- Autoscale
+- Change code to be async from being a sync
+- Possibly break RESTful API up into approapriate silos (microservices) based on demand and or responsibility (CQRS)
+- Ensure high IOPs for DB access and ensure instances are close (thinking of AWS placement groups)
+- Use redis and use write through pattern to write changes onto DB 
+
+### Consider continuous operation in the event of problems around reading and writing from the DB
+
+- Configure DB for HA, read replicas
+- Cycle DB passwords on regular basis
+- Failover to different region, minimum, configure for different Availbility Zone
+- Rearchitect for loosely coupling using messaging service (thinking of SQS or RabbitMQ)
+- Mechanism to update customers of system degredation (thinking of statuspage.io)
+- Monitor servers & services (thinking of datadog)
+- Runbooks
+
+### Consider how to ensure security of the user information
+
+- Permissions to run and permissions to operation
+- Use hashed password
+- Mask PII fields
+- Regularly recycle DB password
+- Use an appropriate Key Management Service for database encryption
+- Encrypt data as rest (database storage)
+- Use Database Encryption option
+- Use TLS for HTTP traffic
+- Don't use live data in dev/test environment
+- Ensure infrastructure is securely configured (e.g. DB not accessible from public internet)
+
+### Other
+
+- Regular database backups
+- Well practiced DR plan
 
 ## Release Notes
 
