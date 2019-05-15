@@ -6,9 +6,27 @@ Master branch will be created and then a feature branch called dev/api-1.
 
 ## Solution notes for developer
 
-Enter this command to run the entire solution from the command line:
+All developed using macOS and not windows.
 
+### Prerequisites
+
+- .NET Core 2.2
+- xUnit
+- Moq
+- Dapper
+
+### docker-compose
+
+Enter this command to build all the containers:
 ```
+docker-compose build
+```
+
+There are 2 images that are build; `myapi` and `garrardkitchen/mysql:5.7.26`. The mysql image loads a default schema which can be found in the `/src/mysql/schema.sql` file.
+
+Enter this command to run the entire solution from the command line:
+```
+cd <into repo root folder>
 docker-compose up
 ```
 
@@ -18,12 +36,30 @@ Enter this command to stop/tear down the entire solution from the command line:
 docker-compose down
 ```
 
-Enter this command to build all the containers:
+### Development
+
+To buld and run an instance of MySQL in docker enter the following commands:
+
 ```
-docker-compose build
+cd src/mysql
+./build.sh
+./run.sh
 ```
 
-There are 2 images that are build; `myapi` and `garrardkitchen/mysql:5.7.26`. The mysql image loads a default schema which can be found in the `mysql/seed.sql` file.
+Open Users solution (`/Users.sln`) in Visual Studio 2019 or Rider. Select Users.Web as start up project and run/debug.
+
+Test the RESTful API by using the 3 endpoints as shown in the `POSTMAN` section below.
+
+There are 2 test projects located in the `/tests` folder.  These test the API and the other the RESTful API endpoints (TODO).
+
+If you want to run from the command line, outside of an IDE, please run the following:
+
+```
+./build.sh
+./run.sh
+```
+
+## POSTMAN
 
 To add user details:
 
@@ -32,7 +68,7 @@ GET http://localhost:5000/api/user/add
 {
   "firstname": "Garrard",
   "surname": "Kitchen",
-  "email": "garrardkitchen@gmail.com",
+  "email": "garrardpkitchen@yahoo.co.uk",
   "password" : "ABCD"
 }
 ```
@@ -40,29 +76,25 @@ GET http://localhost:5000/api/user/add
 To update user details:
 
 ```json
-GET http://localhost:5000/api/user/add
+GET http://localhost:5000/api/user/update
 {
   "firstname": "Garrard",
   "surname": "Kitchen",
-  "email": "garrardpkitchen@yahoo.co.uk",
+  "email": "garrardkitchen@gmail.com",
   "password" : "EFGH"
 }
 ```
 
-To obtain a user details:
+To obtain user details for email **garrardkitchen@gmail.com**:
 
 ```http
-GET http://localhost:5000/api/user/garrardpkitchen@yahoo.co.uk
+GET http://localhost:5000/api/user/garrardkitchen@gmail.com
 ```
+
 
 ## Domain Specific Language
 
 - TBC
-
-## Tests
-
-- Unit 
-- Integration
 
 ## Sprint
 
@@ -123,8 +155,13 @@ dotnet sln users.sln add **/*.csproj
 
 Going to use MySQL. In reality, based on spec and the type of data (what I consider to be a list and non relational), I would opt for NoSQL engine and initially partition on first letter of Surname.  I would always opt for a managed cloud service. Other considerations will be HA and configuring solution over multiple cloud providers if you need to go to that extreme.  I would definitely configure over multiple availability zones for minimum HA, but would push for cross region HA and well practices DR procedures & drills.
 
-- Create MySQL using docker
+- Run MySQL instance using docker
 
 ```docker
 docker run --name my-sql --rm -e MYSQL_ROOT_PASSWORD=password -p 3306:3306 -d mysql:5.7.26
 ```
+
+
+## Release Notes
+
+0.1.0 RESTful API that accepts requests to insert, update & read user information.
