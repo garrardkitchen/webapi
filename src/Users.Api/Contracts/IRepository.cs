@@ -1,9 +1,6 @@
-using System;
 using System.Data;
-using System.Data.SqlClient;
-using Users.Shared;
 
-namespace Users.Api
+namespace Users.Api.Contracts
 {
     public interface IRepository<T>
     {

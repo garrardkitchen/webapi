@@ -23,7 +23,7 @@ namespace Users.Shared
             Surname = surname;
             Email = email;
         }
-
+        
         public string Firstname { get; set; }
         public string Surname { get; set; }
         public string Email { get; set; }

@@ -1,9 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Users.Api;
+using Users.Api.Contracts;
+using Users.Api.Exceptions;
 using Users.Api.Infrastructure;
 using Users.Shared;
 
@@ -19,12 +18,18 @@ namespace Users.Web.Controllers
         {
             IRepository<UserDto> repository = new Repository(Config.ConnectionString);
             Users.Api.User userApi = new User(repository);
-            UserDto user = userApi.GetUser(email);
-            if (user == null)
+            try 
             {
-                return BadRequest(new {message = "This email does not exist"}); 
-            } else {
+                UserDto user = userApi.GetUser(email);
                 return Ok(new{firstname=user.Firstname, surname=user.Surname, email=user.Email});
+            }
+            catch (NullUserException ex)
+            {
+                return BadRequest(new {message = ex.Message});
+            }
+            catch (Exception)
+            {
+                return BadRequest();
             }
         }
 
@@ -35,7 +40,18 @@ namespace Users.Web.Controllers
             IRepository<UserDto> repository = new Repository(Config.ConnectionString);
             Users.Api.User userApi = new User(repository);
             UserDto user = userApi.UpdateUser(userDto);
-            return Ok(new{firstname=user.Firstname, surname=user.Surname, email=user.Email});
+            try
+            {
+                return Ok(new {firstname = user.Firstname, surname = user.Surname, email = user.Email});
+            }
+            catch (NullUserException ex)
+            {
+                return BadRequest(new {message = ex.Message});
+            }
+            catch (Exception)
+            {
+                return BadRequest();
+            }
         }
         
         [HttpPost ("add")]
@@ -52,6 +68,10 @@ namespace Users.Web.Controllers
             catch (DuplicateUserException)
             {
                 return BadRequest(new {message = "This email already exists"});
+            }
+            catch (NullUserException ex) 
+            {
+                return BadRequest(new {message = ex.Message});
             }
             catch (Exception)
             {

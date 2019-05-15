@@ -1,6 +1,6 @@
 using System;
 
-namespace Users.Api
+namespace Users.Api.Exceptions
 {
     public class DuplicateUserException : Exception
     {

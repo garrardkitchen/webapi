@@ -1,6 +1,8 @@
 using System.Data;
 using Dapper;
 using MySql.Data.MySqlClient;
+using Users.Api.Contracts;
+using Users.Api.Exceptions;
 using Users.Shared;
 
 namespace Users.Api
@@ -32,7 +34,8 @@ namespace Users.Api
                     return conn.QueryFirstOrDefault<UserDto>("sp_ins_user", new {firstname= user.Firstname, surname=user.Surname, email=user.Email, password=user.Password}, commandType: CommandType.StoredProcedure);
                 }
             }
-            catch (MySqlException ex)
+            // TODO: Assume less and do more! (G. Kitchen)
+            catch (MySqlException)
             {
                 throw new DuplicateUserException();
             }

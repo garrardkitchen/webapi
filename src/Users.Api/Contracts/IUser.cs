@@ -1,6 +1,6 @@
 using Users.Shared;
 
-namespace Users.Api
+namespace Users.Api.Contracts
 {
     public interface IUser
     {

@@ -1,5 +1,7 @@
 using System;
 using Moq;
+using Users.Api.Contracts;
+using Users.Api.Exceptions;
 using Users.Shared;
 using Xunit;
 
@@ -47,6 +49,17 @@ namespace Users.Api.Tests
             Assert.True(userDto.Email ==  "garrardpkitchen@yahoo.co.uk", "Incorrect email");
         }
         
+        
+        [Fact]
+        public void Fail_Insert_New_Empty_User_Test()
+        {
+            var mock = new Mock<IRepository<UserDto>>();
+            mock.Setup(x => x.Add(It.IsAny<UserDto>())).Returns((UserDto)null);
+            User user = new User(mock.Object);
+            
+            Assert.Throws<NullUserException>(() => { user.AddUser(null); });
+        }
+        
         [Fact]
         public void Fail_Insert_Dupllicate_User_Test()
         {
@@ -73,6 +86,25 @@ namespace Users.Api.Tests
             Assert.True(userDto.Email ==  "garrardpkitchen@yahoo.co.uk2", "Incorrect email");
         }
 
+        [Fact]
+        public void Fail_Update_Empty_User_Test()
+        {
+            var mock = new Mock<IRepository<UserDto>>();
+            mock.Setup(x => x.Add(It.IsAny<UserDto>())).Returns((UserDto)null);
+            User user = new User(mock.Object);
+            
+            Assert.Throws<NullUserException>(() => { user.UpdateUser(null); });
+        }
        
+        [Fact]
+        public void Fail_Get_User_With_Empty_Email_Test()
+        {
+            var mock = new Mock<IRepository<UserDto>>();
+            mock.Setup(x => x.Add(It.IsAny<UserDto>())).Returns((UserDto)null);
+            User user = new User(mock.Object);
+            
+            Assert.Throws<NullUserException>(() => { user.GetUser(null); });
+        }
+
     }
 }
