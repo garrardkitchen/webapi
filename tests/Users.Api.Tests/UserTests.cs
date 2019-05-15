@@ -9,17 +9,7 @@ namespace Users.Api.Tests
 {
     public class UserTests
     {
-        [Fact]
-        public void Fail_Get_User_That_Does_Not_Exist_Test()
-        {
-            var mock = new Mock<IRepository<UserDto>>();
-            mock.Setup(x => x.FindUserByEmail(It.IsAny<string>())).Returns((UserDto)null);
-            User user = new User(mock.Object);
-            UserDto userDto = user.GetUser("garrardpkitchen@yahoo.co.uk");
-            
-            Assert.True(userDto == null, "User incorrectly exists");
-        }
-        
+       
         [Fact]
         public void Pass_Get_User_That_Does_Exist_Test()
         {

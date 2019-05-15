@@ -17,8 +17,9 @@ namespace Users.Api
         public UserDto GetUser(string email)
         {
             if (string.IsNullOrEmpty(email)) throw new NullUserException("Incomplete user details");
-            
-            return Repository.FindUserByEmail(email);
+            var user = Repository.FindUserByEmail(email); 
+            if (user == null) throw new NullUserException("User not found");
+            return user;
         }
 
         public UserDto AddUser(UserDto user)

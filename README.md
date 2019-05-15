@@ -15,14 +15,22 @@ All developed using macOS and not windows.
 - Moq
 - Dapper
 
-### docker-compose
+## Getting Started
 
-Enter this command to build all the containers:
+This section covers the options available to getting up and running with the solution.  These options include using docker-compose and an IDE.
+
+### Option 1 - docker-compose
+
+To run the entire solution `cd <into repo root folder>` and follow these instructions:
+
+To build all images for the containers enter:
 ```
 docker-compose build
 ```
 
-There are 2 images that are build; `myapi` and `garrardkitchen/mysql:5.7.26`. The mysql image loads a default schema which can be found in the `/src/mysql/schema.sql` file.
+The above builds, tests and creates the images required for the solution.
+
+There are 2 images that are built; `myapi` and `garrardkitchen/mysql:5.7.26`. The mysql image loads a default schema which can be found in the `/src/mysql/schema.sql` file.
 
 Enter this command to run the entire solution from the command line:
 ```
@@ -36,7 +44,7 @@ Enter this command to stop/tear down the entire solution from the command line:
 docker-compose down
 ```
 
-### Development
+### Option 2 - IDE
 
 To buld and run an instance of MySQL in docker enter the following commands:
 
@@ -176,6 +184,7 @@ docker run --name my-sql --rm -e MYSQL_ROOT_PASSWORD=password -p 3306:3306 -d my
 - Load balance RESTful API over multiple instances
 - Scale based on demand
 - Canary releases
+- Ensure redirect to Https endpoints
 
 ### Consider how a large volume of requests, including concurrent creation and update operations
 
@@ -204,7 +213,7 @@ docker run --name my-sql --rm -e MYSQL_ROOT_PASSWORD=password -p 3306:3306 -d my
 - Use an appropriate Key Management Service for database encryption
 - Encrypt data as rest (database storage)
 - Use Database Encryption option
-- Use TLS for HTTP traffic
+- Use TLS for HTTP data in transit
 - Don't use live data in dev/test environment
 - Ensure infrastructure is securely configured (e.g. DB not accessible from public internet)
 
